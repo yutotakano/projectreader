@@ -22,6 +22,10 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
+        if (Build.VERSION.SDK_INT >= 29) {
+            // Make navigation bar flush with system app bar
+            window.isNavigationBarContrastEnforced = false
+        };
         setContent {
             ProjectReaderTheme(dynamicColor = false) {
                 Scaffold(
