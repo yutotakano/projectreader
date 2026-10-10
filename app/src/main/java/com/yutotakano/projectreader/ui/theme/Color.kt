@@ -2,10 +2,22 @@ package com.yutotakano.projectreader.ui.theme
 
 import androidx.compose.ui.graphics.Color
 
-val Purple80 = Color(0xFFD0BCFF)
-val PurpleGrey80 = Color(0xFFCCC2DC)
-val Pink80 = Color(0xFFEFB8C8)
+val Brown5 = Color(0xFF582F0E)
 
-val Purple40 = Color(0xFF6650a4)
-val PurpleGrey40 = Color(0xFF625b71)
-val Pink40 = Color(0xFF7D5260)
+val Brown4 = Color(0xFF7F4F24)
+
+val Brown3 = Color(0xFF936639)
+
+val Brown2 = Color(0xFFA68A64)
+
+val Brown1 = Color(0xFFB6AD90)
+
+val Green1 = Color(0xFFC2C5AA)
+
+val Green2 = Color(0xFFA4AC86)
+
+val Green3 = Color(0xFF656D4A)
+
+val Green4 = Color(0xFF414833)
+
+val Green5 = Color(0xFF333D29)
