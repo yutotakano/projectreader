@@ -16,6 +16,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.navigation.compose.rememberNavController
 import com.yutotakano.projectreader.ui.icons.home
 import com.yutotakano.projectreader.ui.theme.ProjectReaderTheme
 
@@ -26,30 +27,37 @@ class MainActivity : ComponentActivity() {
         if (Build.VERSION.SDK_INT >= 29) {
             // Make navigation bar flush with system app bar
             window.isNavigationBarContrastEnforced = false
-        };
+        }
         setContent {
             ProjectReaderTheme(dynamicColor = false) {
-                Scaffold(
-                    modifier = Modifier.fillMaxSize(),
-                    bottomBar = {
-                        NavigationBar(
-                            containerColor = MaterialTheme.colorScheme.surface
-                        ) {
-                            NavigationBarItem(selected = false, onClick = {}, icon = {
-                                Icon(home, "home")
-                            }, label = {
-                                Text(text="Home")
-                            })
-                        }
-                    }
-                ) { innerPadding ->
-                    Greeting(
-                        name = "Android",
-                        modifier = Modifier.padding(innerPadding)
-                    )
-                }
+                MainActivityComposable()
             }
         }
+    }
+}
+
+@Composable
+fun MainActivityComposable() {
+    val navController = rememberNavController()
+    Scaffold(
+        modifier = Modifier.fillMaxSize(),
+        bottomBar = {
+            NavigationBar(
+                // Need to override as it hardcodes a purple color by default
+                containerColor = MaterialTheme.colorScheme.surface
+            ) {
+                NavigationBarItem(selected = false, onClick = {}, icon = {
+                    Icon(home, "home")
+                }, label = {
+                    Text(text="Home")
+                })
+            }
+        }
+    ) { innerPadding ->
+        Greeting(
+            name = "Android",
+            modifier = Modifier.padding(innerPadding)
+        )
     }
 }
 
