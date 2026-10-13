@@ -35,6 +35,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.RectangleShape
+import androidx.compose.ui.layout.layout
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -102,7 +103,19 @@ fun MainActivityComposable() {
                     }
                 }
             }
-            Column {
+            Column(
+                // NavigationRail adds a 20dp right padding (assuming each item would add 20dp
+                // left padding). We want to be flush so counteract that by placing with a larger
+                // width but reporting the shorter width.
+                modifier = Modifier.layout { measurable, constraints ->
+                    val placeable = measurable.measure(
+                        constraints.copy(maxWidth = constraints.maxWidth + 20.dp.roundToPx()),
+                    )
+                    layout(placeable.width - 20.dp.roundToPx(), placeable.height) {
+                        placeable.place(0, 0)
+                    }
+                },
+            ) {
                 NavigationDrawerItem(
                     selected = false,
                     icon = {},
