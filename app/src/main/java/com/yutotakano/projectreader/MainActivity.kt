@@ -8,30 +8,32 @@ import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalWideNavigationRail
 import androidx.compose.material3.ModalWideNavigationRailProperties
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
-import androidx.compose.material3.NavigationRail
-import androidx.compose.material3.NavigationRailItem
+import androidx.compose.material3.NavigationDrawerItem
 import androidx.compose.material3.OutlinedIconButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.material3.WideNavigationRailDefaults
-import androidx.compose.material3.WideNavigationRailItem
-import androidx.compose.material3.WideNavigationRailState
 import androidx.compose.material3.WideNavigationRailValue
 import androidx.compose.material3.rememberWideNavigationRailState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.DialogWindowProvider
 import androidx.navigation.compose.rememberNavController
 import com.yutotakano.projectreader.ui.icons.home
@@ -72,7 +74,7 @@ fun MainActivityComposable() {
                 NavigationBarItem(selected = false, onClick = {}, icon = {
                     Icon(home, "home")
                 }, label = {
-                    Text(text="Home")
+                    Text(text = "Home")
                 })
             }
         }
@@ -91,15 +93,25 @@ fun MainActivityComposable() {
                     }
                 }
             }
-            WideNavigationRailItem(
-                railExpanded = true,
+            Text(
+                "Section 1",
+                modifier = Modifier.padding(16.dp),
+                style = MaterialTheme.typography.titleSmall
+            )
+            NavigationDrawerItem(
                 selected = false,
                 icon = {
                     Icon(home, "home")
                 },
+                shape = RectangleShape,
+                modifier = Modifier.padding(16.dp),
                 onClick = {},
                 label = {
-                    Text(text = "Home", modifier = Modifier.fillMaxWidth(), textAlign = TextAlign.Left)
+                    Text(
+                        text = "Home",
+                        modifier = Modifier.fillMaxWidth(),
+                        textAlign = TextAlign.Left
+                    )
                 }
             )
         }
@@ -116,10 +128,15 @@ fun MainActivityComposable() {
 @Composable
 fun Greeting(name: String, modifier: Modifier = Modifier, expandNav: () -> Unit) {
     Column(
-        modifier = modifier
+        modifier = modifier.fillMaxWidth(),
+        horizontalAlignment = Alignment.CenterHorizontally
     ) {
         OutlinedIconButton(
             onClick = expandNav,
+            shape = CircleShape,
+            modifier = Modifier
+                .width(80.dp)
+                .height(80.dp)
         ) {
             Icon(home, "home")
         }
