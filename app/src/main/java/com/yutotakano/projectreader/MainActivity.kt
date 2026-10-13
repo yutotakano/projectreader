@@ -66,7 +66,7 @@ class MainActivity : ComponentActivity() {
 fun MainActivityComposable() {
     val navController = rememberNavController()
     val navigationRailState = rememberWideNavigationRailState(
-        initialValue = WideNavigationRailValue.Collapsed
+        initialValue = WideNavigationRailValue.Collapsed,
     )
     val coroutineScope = rememberCoroutineScope()
 
@@ -76,19 +76,23 @@ fun MainActivityComposable() {
         modifier = Modifier.fillMaxSize(),
         bottomBar = {
             NavigationBar {
-                NavigationBarItem(selected = false, onClick = {}, icon = {
-                    Icon(home, "home")
-                }, label = {
-                    Text(text = "Home")
-                })
+                NavigationBarItem(
+                    selected = false, onClick = {},
+                    icon = {
+                        Icon(home, "home")
+                    },
+                    label = {
+                        Text(text = "Home")
+                    },
+                )
             }
-        }
+        },
     ) { innerPadding ->
         ModalWideNavigationRail(
             state = navigationRailState,
             hideOnCollapse = true,
             expandedProperties = ModalWideNavigationRailProperties(
-                shouldDismissOnBackPress = true
+                shouldDismissOnBackPress = true,
             ),
         ) {
             (LocalView.current.parent as? DialogWindowProvider)?.window?.let { window ->
@@ -103,8 +107,7 @@ fun MainActivityComposable() {
                     selected = false,
                     icon = {},
                     shape = RectangleShape,
-                    modifier = Modifier
-                        .padding(0.dp),
+                    modifier = Modifier.padding(0.dp),
                     onClick = {
                         if ("section1" in collapsedSections) {
                             collapsedSections.remove("section1")
@@ -116,12 +119,12 @@ fun MainActivityComposable() {
                         Row {
                             Text(
                                 "Section 1",
-                                style = MaterialTheme.typography.titleSmall
+                                style = MaterialTheme.typography.titleSmall,
                             )
                             Spacer(Modifier.weight(1f))
                             Icon(home, "home")
                         }
-                    }
+                    },
                 )
                 AnimatedVisibility("section1" !in collapsedSections) {
                     NavigationDrawerItem(
@@ -136,9 +139,9 @@ fun MainActivityComposable() {
                             Text(
                                 text = "Home",
                                 modifier = Modifier.fillMaxWidth(),
-                                textAlign = TextAlign.Left
+                                textAlign = TextAlign.Left,
                             )
-                        }
+                        },
                     )
                 }
             }
@@ -148,7 +151,7 @@ fun MainActivityComposable() {
             modifier = Modifier.padding(innerPadding),
             expandNav = {
                 coroutineScope.launch { navigationRailState.expand() }
-            }
+            },
         )
     }
 }
@@ -157,14 +160,14 @@ fun MainActivityComposable() {
 fun Greeting(name: String, modifier: Modifier = Modifier, expandNav: () -> Unit) {
     Column(
         modifier = modifier.fillMaxWidth(),
-        horizontalAlignment = Alignment.CenterHorizontally
+        horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         OutlinedIconButton(
             onClick = expandNav,
             shape = CircleShape,
             modifier = Modifier
                 .width(80.dp)
-                .height(80.dp)
+                .height(80.dp),
         ) {
             Icon(home, "home")
         }
