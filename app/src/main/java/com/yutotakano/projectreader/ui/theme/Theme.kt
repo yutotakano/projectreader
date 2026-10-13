@@ -15,7 +15,8 @@ private val DarkColorScheme = darkColorScheme(
     primary = Brown3,
     secondary = Brown4,
     tertiary = Brown5,
-    surface = Brown5.copy(alpha=0.2f)
+    surface = Brown5.copy(alpha = 0.2f),
+    surfaceContainer = Brown6,
 )
 
 private val LightColorScheme = lightColorScheme(
@@ -23,7 +24,8 @@ private val LightColorScheme = lightColorScheme(
     secondary = Brown2,
     tertiary = Brown1,
     background = Color.White,
-    surface = Brown1.copy(alpha=0.2f)
+    surface = Brown1.copy(alpha = 0.2f),
+    surfaceContainer = Brown0,
 
     /* Other default colors to override
     background = Color(0xFFFFFBFE),

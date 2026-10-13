@@ -5,7 +5,10 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -26,6 +29,8 @@ import androidx.compose.material3.WideNavigationRailValue
 import androidx.compose.material3.rememberWideNavigationRailState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.SideEffect
+import androidx.compose.runtime.mutableStateSetOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -64,13 +69,13 @@ fun MainActivityComposable() {
         initialValue = WideNavigationRailValue.Collapsed
     )
     val coroutineScope = rememberCoroutineScope()
+
+    val collapsedSections = remember { mutableStateSetOf<String>() }
+
     Scaffold(
         modifier = Modifier.fillMaxSize(),
         bottomBar = {
-            NavigationBar(
-                // Need to override as it hardcodes a purple color by default
-                containerColor = MaterialTheme.colorScheme.surface
-            ) {
+            NavigationBar {
                 NavigationBarItem(selected = false, onClick = {}, icon = {
                     Icon(home, "home")
                 }, label = {
@@ -93,30 +98,53 @@ fun MainActivityComposable() {
                     }
                 }
             }
-            Text(
-                "Section 1",
-                modifier = Modifier.padding(16.dp),
-                style = MaterialTheme.typography.titleSmall
-            )
-            NavigationDrawerItem(
-                selected = false,
-                icon = {
-                    Icon(home, "home")
-                },
-                shape = RectangleShape,
-                modifier = Modifier.padding(16.dp),
-                onClick = {},
-                label = {
-                    Text(
-                        text = "Home",
-                        modifier = Modifier.fillMaxWidth(),
-                        textAlign = TextAlign.Left
+            Column {
+                NavigationDrawerItem(
+                    selected = false,
+                    icon = {},
+                    shape = RectangleShape,
+                    modifier = Modifier
+                        .padding(0.dp),
+                    onClick = {
+                        if ("section1" in collapsedSections) {
+                            collapsedSections.remove("section1")
+                        } else {
+                            collapsedSections.add("section1")
+                        }
+                    },
+                    label = {
+                        Row {
+                            Text(
+                                "Section 1",
+                                style = MaterialTheme.typography.titleSmall
+                            )
+                            Spacer(Modifier.weight(1f))
+                            Icon(home, "home")
+                        }
+                    }
+                )
+                AnimatedVisibility("section1" !in collapsedSections) {
+                    NavigationDrawerItem(
+                        selected = false,
+                        icon = {
+                            Icon(home, "home")
+                        },
+                        shape = RectangleShape,
+                        modifier = Modifier.padding(0.dp),
+                        onClick = {},
+                        label = {
+                            Text(
+                                text = "Home",
+                                modifier = Modifier.fillMaxWidth(),
+                                textAlign = TextAlign.Left
+                            )
+                        }
                     )
                 }
-            )
+            }
         }
         Greeting(
-            name = "Android",
+            name = "Android: " + collapsedSections.joinToString(";"),
             modifier = Modifier.padding(innerPadding),
             expandNav = {
                 coroutineScope.launch { navigationRailState.expand() }
