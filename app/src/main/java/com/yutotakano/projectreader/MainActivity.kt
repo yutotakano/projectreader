@@ -147,7 +147,7 @@ fun MainActivityComposable() {
             }
         }
         Greeting(
-            name = "Android: " + collapsedSections.joinToString(";"),
+            name = "Android",
             modifier = Modifier.padding(innerPadding),
             expandNav = {
                 coroutineScope.launch { navigationRailState.expand() }
