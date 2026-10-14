@@ -6,6 +6,7 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -29,11 +30,13 @@ import androidx.compose.material3.WideNavigationRailValue
 import androidx.compose.material3.rememberWideNavigationRailState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.SideEffect
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateSetOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.layout.layout
 import androidx.compose.ui.platform.LocalView
@@ -42,6 +45,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.DialogWindowProvider
 import androidx.navigation.compose.rememberNavController
+import com.yutotakano.projectreader.ui.icons.chevron_right
 import com.yutotakano.projectreader.ui.icons.home
 import com.yutotakano.projectreader.ui.theme.ProjectReaderTheme
 import kotlinx.coroutines.launch
@@ -72,6 +76,12 @@ fun MainActivityComposable() {
     val coroutineScope = rememberCoroutineScope()
 
     val collapsedSections = remember { mutableStateSetOf<String>() }
+
+    val animatedRotate: Float by animateFloatAsState(
+        if ("section1" in collapsedSections) 90f else 270f,
+        label = "rotation",
+    )
+
 
     Scaffold(
         modifier = Modifier.fillMaxSize(),
@@ -139,7 +149,11 @@ fun MainActivityComposable() {
                                 style = MaterialTheme.typography.titleSmall,
                             )
                             Spacer(Modifier.weight(1f))
-                            Icon(home, "home")
+                            Icon(
+                                chevron_right,
+                                "Expand/Collapse",
+                                modifier = Modifier.rotate(animatedRotate),
+                            )
                         }
                     },
                 )
