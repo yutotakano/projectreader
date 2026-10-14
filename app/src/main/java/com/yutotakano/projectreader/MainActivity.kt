@@ -23,6 +23,7 @@ import androidx.compose.material3.ModalWideNavigationRailProperties
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.NavigationDrawerItem
+import androidx.compose.material3.NavigationDrawerItemDefaults
 import androidx.compose.material3.OutlinedIconButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -134,6 +135,9 @@ fun MainActivityComposable() {
                     selected = false,
                     icon = {},
                     shape = RectangleShape,
+                    colors = NavigationDrawerItemDefaults.colors(
+                        unselectedContainerColor = MaterialTheme.colorScheme.surface,
+                    ),
                     modifier = Modifier.padding(0.dp),
                     onClick = {
                         if ("section1" in collapsedSections) {
@@ -143,10 +147,10 @@ fun MainActivityComposable() {
                         }
                     },
                     label = {
-                        Row {
+                        Row(verticalAlignment = Alignment.CenterVertically) {
                             Text(
                                 "Section 1",
-                                style = MaterialTheme.typography.titleSmall,
+                                style = MaterialTheme.typography.labelMedium,
                             )
                             Spacer(Modifier.weight(1f))
                             Icon(
