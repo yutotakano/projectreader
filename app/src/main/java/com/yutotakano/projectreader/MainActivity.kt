@@ -96,7 +96,11 @@ fun MainActivityComposable() {
                 shouldDismissOnBackPress = true,
             ),
         ) {
+            // Modals get their own Window separate from the main one, so we have to re-configure
+            // the navbar contrast enforcement option to get true edge-to-edge.
             (LocalView.current.parent as? DialogWindowProvider)?.window?.let { window ->
+                // Need to use SideEffect rather than LaunchedEffect here to guarantee it runs any
+                // draw, otherwise we get a flash of nav bar contrast before it turns off
                 SideEffect {
                     if (Build.VERSION.SDK_INT >= 29) {
                         window.isNavigationBarContrastEnforced = false
