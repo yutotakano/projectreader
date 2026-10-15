@@ -71,18 +71,11 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun MainActivityComposable() {
     val navController = rememberNavController()
+    val coroutineScope = rememberCoroutineScope()
+
     val navigationRailState = rememberWideNavigationRailState(
         initialValue = WideNavigationRailValue.Collapsed,
     )
-    val coroutineScope = rememberCoroutineScope()
-
-    val collapsedSections = remember { mutableStateSetOf<String>() }
-
-    val animatedRotate: Float by animateFloatAsState(
-        if ("section1" in collapsedSections) 90f else 270f,
-        label = "rotation",
-    )
-
 
     Scaffold(
         modifier = Modifier.fillMaxSize(),
@@ -107,79 +100,7 @@ fun MainActivityComposable() {
                 shouldDismissOnBackPress = true,
             ),
         ) {
-            // Modals get their own Window separate from the main one, so we have to re-configure
-            // the navbar contrast enforcement option to get true edge-to-edge.
-            (LocalView.current.parent as? DialogWindowProvider)?.window?.let { window ->
-                // Need to use SideEffect rather than LaunchedEffect here to guarantee it runs any
-                // draw, otherwise we get a flash of nav bar contrast before it turns off
-                SideEffect {
-                    if (Build.VERSION.SDK_INT >= 29) {
-                        window.isNavigationBarContrastEnforced = false
-                    }
-                }
-            }
-            Column(
-                // NavigationRail adds a 20dp right padding (assuming each item would add 20dp
-                // left padding). We want to be flush so counteract that by placing with a larger
-                // width but reporting the shorter width.
-                modifier = Modifier.layout { measurable, constraints ->
-                    val placeable = measurable.measure(
-                        constraints.copy(maxWidth = constraints.maxWidth + 20.dp.roundToPx()),
-                    )
-                    layout(placeable.width - 20.dp.roundToPx(), placeable.height) {
-                        placeable.place(0, 0)
-                    }
-                },
-            ) {
-                NavigationDrawerItem(
-                    selected = false,
-                    icon = {},
-                    shape = RectangleShape,
-                    colors = NavigationDrawerItemDefaults.colors(
-                        unselectedContainerColor = MaterialTheme.colorScheme.surface,
-                    ),
-                    modifier = Modifier.padding(0.dp),
-                    onClick = {
-                        if ("section1" in collapsedSections) {
-                            collapsedSections.remove("section1")
-                        } else {
-                            collapsedSections.add("section1")
-                        }
-                    },
-                    label = {
-                        Row(verticalAlignment = Alignment.CenterVertically) {
-                            Text(
-                                "Section 1",
-                                style = MaterialTheme.typography.labelMedium,
-                            )
-                            Spacer(Modifier.weight(1f))
-                            Icon(
-                                chevron_right,
-                                "Expand/Collapse",
-                                modifier = Modifier.rotate(animatedRotate),
-                            )
-                        }
-                    },
-                )
-                AnimatedVisibility("section1" !in collapsedSections) {
-                    NavigationDrawerItem(
-                        selected = false,
-                        icon = {
-                            Icon(home, "home")
-                        },
-                        shape = RectangleShape,
-                        modifier = Modifier.padding(0.dp),
-                        onClick = {},
-                        label = {
-                            Text(
-                                text = "Home",
-                                modifier = Modifier.fillMaxWidth(),
-                                textAlign = TextAlign.Left,
-                            )
-                        },
-                    )
-                }
-            }
+            ProjectReaderNavigationRail()
         }
         Greeting(
             name = "Android",
@@ -188,6 +109,91 @@ fun MainActivityComposable() {
                 coroutineScope.launch { navigationRailState.expand() }
             },
         )
+    }
+}
+
+@Preview
+@Composable
+fun ProjectReaderNavigationRail() {
+    val collapsedSections = remember { mutableStateSetOf<String>() }
+
+    val animatedRotate: Float by animateFloatAsState(
+        if ("section1" in collapsedSections) 90f else 270f,
+        label = "rotation",
+    )
+
+    // Modals get their own Window separate from the main one, so we have to re-configure
+    // the navbar contrast enforcement option to get true edge-to-edge.
+    (LocalView.current.parent as? DialogWindowProvider)?.window?.let { window ->
+        // Need to use SideEffect rather than LaunchedEffect here to guarantee it runs any
+        // draw, otherwise we get a flash of nav bar contrast before it turns off
+        SideEffect {
+            if (Build.VERSION.SDK_INT >= 29) {
+                window.isNavigationBarContrastEnforced = false
+            }
+        }
+    }
+    Column(
+        // NavigationRail adds a 20dp right padding (assuming each item would add 20dp
+        // left padding). We want to be flush so counteract that by placing with a larger
+        // width but reporting the shorter width.
+        modifier = Modifier.layout { measurable, constraints ->
+            val placeable = measurable.measure(
+                constraints.copy(maxWidth = constraints.maxWidth + 20.dp.roundToPx()),
+            )
+            layout(placeable.width - 20.dp.roundToPx(), placeable.height) {
+                placeable.place(0, 0)
+            }
+        },
+    ) {
+        NavigationDrawerItem(
+            selected = false,
+            icon = {},
+            shape = RectangleShape,
+            colors = NavigationDrawerItemDefaults.colors(
+                unselectedContainerColor = MaterialTheme.colorScheme.surface,
+            ),
+            modifier = Modifier.padding(0.dp),
+            onClick = {
+                if ("section1" in collapsedSections) {
+                    collapsedSections.remove("section1")
+                } else {
+                    collapsedSections.add("section1")
+                }
+            },
+            label = {
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    Text(
+                        "Section 1",
+                        style = MaterialTheme.typography.labelMedium,
+                    )
+                    Spacer(Modifier.weight(1f))
+                    Icon(
+                        chevron_right,
+                        "Expand/Collapse",
+                        modifier = Modifier.rotate(animatedRotate),
+                    )
+                }
+            },
+        )
+        AnimatedVisibility("section1" !in collapsedSections) {
+            NavigationDrawerItem(
+                selected = false,
+                icon = {
+                    Icon(home, "home")
+                },
+                shape = RectangleShape,
+                modifier = Modifier.padding(0.dp),
+                onClick = {},
+                label = {
+                    Text(
+                        text = "Home",
+                        modifier = Modifier.fillMaxWidth(),
+                        textAlign = TextAlign.Left,
+                    )
+                },
+            )
+        }
     }
 }
 
@@ -211,6 +217,7 @@ fun Greeting(name: String, modifier: Modifier = Modifier, expandNav: () -> Unit)
         )
     }
 }
+
 
 @Preview(showBackground = true)
 @Composable
