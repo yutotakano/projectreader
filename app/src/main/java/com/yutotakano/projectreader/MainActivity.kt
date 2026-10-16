@@ -49,6 +49,7 @@ import androidx.navigation.compose.rememberNavController
 import com.yutotakano.projectreader.ui.icons.chevron_right
 import com.yutotakano.projectreader.ui.icons.explore
 import com.yutotakano.projectreader.ui.icons.home
+import com.yutotakano.projectreader.ui.icons.newsstand
 import com.yutotakano.projectreader.ui.theme.ProjectReaderTheme
 import kotlinx.coroutines.launch
 
@@ -113,13 +114,19 @@ fun MainActivityComposable() {
     }
 }
 
-@Preview
+enum class CollapsibleNavSections {
+    Explore,
+    Shelves,
+    Settings
+}
+
+@Preview(showBackground = false)
 @Composable
 fun ProjectReaderNavigationRail() {
-    val collapsedSections = remember { mutableStateSetOf<String>() }
+    val collapsedSections = remember { mutableStateSetOf<CollapsibleNavSections>() }
 
     val animatedRotate: Float by animateFloatAsState(
-        if ("section1" in collapsedSections) 90f else 270f,
+        if (CollapsibleNavSections.Shelves in collapsedSections) 90f else 270f,
         label = "rotation",
     )
 
@@ -172,16 +179,16 @@ fun ProjectReaderNavigationRail() {
             ),
             modifier = Modifier.padding(0.dp),
             onClick = {
-                if ("section1" in collapsedSections) {
-                    collapsedSections.remove("section1")
+                if (CollapsibleNavSections.Shelves in collapsedSections) {
+                    collapsedSections.remove(CollapsibleNavSections.Shelves)
                 } else {
-                    collapsedSections.add("section1")
+                    collapsedSections.add(CollapsibleNavSections.Shelves)
                 }
             },
             label = {
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     Text(
-                        "Section 1",
+                        "本棚",
                         style = MaterialTheme.typography.labelMedium,
                     )
                     Spacer(Modifier.weight(1f))
@@ -193,23 +200,73 @@ fun ProjectReaderNavigationRail() {
                 }
             },
         )
-        AnimatedVisibility("section1" !in collapsedSections) {
-            NavigationDrawerItem(
-                selected = false,
-                icon = {
-                    Icon(home, "home")
-                },
-                shape = RectangleShape,
-                modifier = Modifier.padding(0.dp),
-                onClick = {},
-                label = {
-                    Text(
-                        text = "Home",
-                        modifier = Modifier.fillMaxWidth(),
-                        textAlign = TextAlign.Left,
-                    )
-                },
-            )
+        AnimatedVisibility(CollapsibleNavSections.Shelves !in collapsedSections) {
+            Column {
+                NavigationDrawerItem(
+                    selected = false,
+                    icon = {
+                        Icon(newsstand, "Shelf")
+                    },
+                    shape = RectangleShape,
+                    modifier = Modifier.padding(0.dp),
+                    onClick = {},
+                    label = {
+                        Text(
+                            text = "最近読んだ作品",
+                            modifier = Modifier.fillMaxWidth(),
+                            textAlign = TextAlign.Left,
+                        )
+                    },
+                )
+                NavigationDrawerItem(
+                    selected = false,
+                    icon = {
+                        Icon(newsstand, "Shelf")
+                    },
+                    shape = RectangleShape,
+                    modifier = Modifier.padding(0.dp),
+                    onClick = {},
+                    label = {
+                        Text(
+                            text = "好きな作品",
+                            modifier = Modifier.fillMaxWidth(),
+                            textAlign = TextAlign.Left,
+                        )
+                    },
+                )
+                NavigationDrawerItem(
+                    selected = false,
+                    icon = {
+                        Icon(newsstand, "Shelf")
+                    },
+                    shape = RectangleShape,
+                    modifier = Modifier.padding(0.dp),
+                    onClick = {},
+                    label = {
+                        Text(
+                            text = "完結済みな作品",
+                            modifier = Modifier.fillMaxWidth(),
+                            textAlign = TextAlign.Left,
+                        )
+                    },
+                )
+                NavigationDrawerItem(
+                    selected = false,
+                    icon = {
+                        Icon(newsstand, "Shelf")
+                    },
+                    shape = RectangleShape,
+                    modifier = Modifier.padding(0.dp),
+                    onClick = {},
+                    label = {
+                        Text(
+                            text = "作品一覧",
+                            modifier = Modifier.fillMaxWidth(),
+                            textAlign = TextAlign.Left,
+                        )
+                    },
+                )
+            }
         }
     }
 }
