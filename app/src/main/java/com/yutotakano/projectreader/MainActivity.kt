@@ -47,6 +47,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.DialogWindowProvider
 import androidx.navigation.compose.rememberNavController
 import com.yutotakano.projectreader.ui.icons.chevron_right
+import com.yutotakano.projectreader.ui.icons.explore
 import com.yutotakano.projectreader.ui.icons.home
 import com.yutotakano.projectreader.ui.theme.ProjectReaderTheme
 import kotlinx.coroutines.launch
@@ -87,7 +88,7 @@ fun MainActivityComposable() {
                         Icon(home, "home")
                     },
                     label = {
-                        Text(text = "Home")
+                        Text(text = "ホーム")
                     },
                 )
             }
@@ -146,6 +147,22 @@ fun ProjectReaderNavigationRail() {
             }
         },
     ) {
+        NavigationDrawerItem(
+            selected = false,
+            icon = {
+                Icon(explore, "explore")
+            },
+            shape = RectangleShape,
+            modifier = Modifier.padding(0.dp),
+            onClick = {},
+            label = {
+                Text(
+                    text = "あてもなく散策する",
+                    modifier = Modifier.fillMaxWidth(),
+                    textAlign = TextAlign.Left,
+                )
+            },
+        )
         NavigationDrawerItem(
             selected = false,
             icon = {},
